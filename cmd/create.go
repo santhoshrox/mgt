@@ -6,9 +6,10 @@ import (
 )
 
 var createCmd = &cobra.Command{
-	Use:   "create [name]",
-	Short: "Create a new branch stacked on top of the current branch",
-	Args:  cobra.MaximumNArgs(1),
+	Use:                "create [name]",
+	Short:              "Create a new branch stacked on top of the current branch",
+	Args:               cobra.ArbitraryArgs,
+	DisableFlagParsing: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		gtArgs := []string{"branch", "create"}
 		gtArgs = append(gtArgs, args...)
