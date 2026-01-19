@@ -25,9 +25,9 @@ var upCmd = &cobra.Command{
 
 		if current == trunk {
 			// gt branch checkout displays an interactive selector when no branch is provided
-			gt.Run("branch", "checkout")
+			gt.Exec("branch", "checkout")
 		} else {
-			gt.Run("branch", "up")
+			gt.Exec("branch", "up")
 		}
 	},
 }

@@ -4,16 +4,29 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"syscall"
 )
 
-// Run executes the gt command with the given arguments.
-// It redirects stdout and stderr to the current process.
+// Run executes the gt command as a subprocess.
 func Run(args ...string) error {
 	cmd := exec.Command("gt", args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
 	return cmd.Run()
+}
+
+// Exec replaces the current process with the gt command.
+// This is preferred for interactive commands to ensure perfect TTY handling.
+func Exec(args ...string) error {
+	gtPath, err := exec.LookPath("gt")
+	if err != nil {
+		return err
+	}
+
+	// syscall.Exec requires the command name as the first argument in the slice
+	execArgs := append([]string{"gt"}, args...)
+	return syscall.Exec(gtPath, execArgs, os.Environ())
 }
 
 // GetCurrentBranch returns the name of the current git branch.

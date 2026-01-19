@@ -18,7 +18,7 @@ var restackCmd = &cobra.Command{
 		}
 
 		fmt.Println("Restacking current branch and ancestors...")
-		if err := gt.Run("downstack", "restack"); err != nil {
+		if err := gt.Exec("downstack", "restack"); err != nil {
 			fmt.Printf("Error during restack: %v\n", err)
 			return
 		}

@@ -13,7 +13,7 @@ var createCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		gtArgs := []string{"branch", "create"}
 		gtArgs = append(gtArgs, args...)
-		gt.Run(gtArgs...)
+		gt.Exec(gtArgs...)
 	},
 }
 

@@ -13,7 +13,7 @@ var submitCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		gtArgs := []string{"stack", "submit"}
 		gtArgs = append(gtArgs, args...)
-		gt.Run(gtArgs...)
+		gt.Exec(gtArgs...)
 	},
 }
 
