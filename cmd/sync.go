@@ -10,7 +10,7 @@ var syncCmd = &cobra.Command{
 	Aliases: []string{"cleanup", "prune"},
 	Short:   "Sync trunk and cleanup merged branches",
 	Run: func(cmd *cobra.Command, args []string) {
-		gt.Run("repo", "sync")
+		gt.Exec("repo", "sync")
 	},
 }
 
