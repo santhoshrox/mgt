@@ -1,6 +1,6 @@
 # mgt - Improved Charcoal (gt) CLI
 
-`mgt` is a powerful wrapper for the [Charcoal (gt)](https://github.com/danerwilliams/charcoal) CLI, designed to streamline stacked branch workflows with better navigation, TTY transparency, and smarter submission defaults.
+`mgt` is a powerful, **fully-transparent** wrapper for the [Charcoal (gt)](https://github.com/danerwilliams/charcoal) CLI. It implements several productivity-focused enhancements while seamlessly proxying any other commands directly to `gt`.
 
 ## Features
 
@@ -37,3 +37,4 @@ Charcoal is great, but `mgt` adds:
 1. **Interactive Selector from Trunk**: `gt branch up` usually fails on trunk; `mgt up` turns it into a stack picker.
 2. **TTY Transparency**: Uses `syscall.Exec` so that Charcoal's interactive prompts work flawlessly inside the wrapper.
 3. **Safe Submissions**: Protects you from the "infinite title prompt" loop by defaulting `submit` to just the current branch.
+4. **Transparent Proxying**: Any command not explicitly overriden by `mgt` is automatically passed through to `gt`.
