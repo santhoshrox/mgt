@@ -14,6 +14,16 @@
 - **`mgt sync`**: Pull trunk and cleanup merged branches (alias: `cleanup`, `prune`).
 - **`mgt restack`**: Pull trunk and restack the entire current chain.
 
+## Prerequisites
+
+- **Go 1.25.6** or higher
+- **[Charcoal (gt)](https://github.com/danerwilliams/charcoal)**
+
+```bash
+# Install Charcoal via Homebrew
+brew install danerwilliams/tap/charcoal
+```
+
 ## Installation
 
 ```bash
