@@ -38,6 +38,11 @@ func GetCurrentBranch() (string, error) {
 	return strings.TrimSpace(string(out)), nil
 }
 
+// RenameCurrentBranch renames the current branch to newName.
+func RenameCurrentBranch(newName string) error {
+	return exec.Command("git", "branch", "-m", newName).Run()
+}
+
 // GetTrunk returns the trunk branch name.
 func GetTrunk() (string, error) {
 	// Try to get from charcoal if possible, otherwise fallback to main/master
