@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/santhosh/mgt/pkg/config"
 	"github.com/santhosh/mgt/pkg/gt"
