@@ -38,9 +38,13 @@ func GetCurrentBranch() (string, error) {
 	return strings.TrimSpace(string(out)), nil
 }
 
-// RenameCurrentBranch renames the current branch to newName.
+// RenameCurrentBranch renames the current branch to newName using gt,
+// which updates the branch metadata refs that track parent-child relationships.
 func RenameCurrentBranch(newName string) error {
-	return exec.Command("git", "branch", "-m", newName).Run()
+	cmd := exec.Command("gt", "branch", "rename", newName, "--force")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
 }
 
 // GetTrunk returns the trunk branch name.
