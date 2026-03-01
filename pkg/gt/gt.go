@@ -5,6 +5,8 @@ import (
 	"os/exec"
 	"strings"
 	"syscall"
+
+	"github.com/santhosh/mgt/pkg/config"
 )
 
 // Run executes the gt command as a subprocess.
@@ -47,9 +49,23 @@ func RenameCurrentBranch(newName string) error {
 	return cmd.Run()
 }
 
+// EnsureDefaultRemote sets git's checkout.defaultRemote to the configured remote
+// so that commands like `git switch main` are unambiguous when multiple remotes
+// have a branch with the same name.
+func EnsureDefaultRemote() {
+	remote := config.Remote()
+	if remote == "" {
+		return
+	}
+	exec.Command("git", "config", "checkout.defaultRemote", remote).Run()
+}
+
 // GetTrunk returns the trunk branch name.
 func GetTrunk() (string, error) {
-	// Try to get from charcoal if possible, otherwise fallback to main/master
+	if t := config.Trunk(); t != "" {
+		return t, nil
+	}
+
 	out, err := exec.Command("gt", "repo", "info").CombinedOutput()
 	if err == nil {
 		lines := strings.Split(string(out), "\n")
@@ -63,7 +79,6 @@ func GetTrunk() (string, error) {
 		}
 	}
 
-	// Fallback
 	for _, b := range []string{"main", "master", "trunk"} {
 		if err := exec.Command("git", "rev-parse", "--verify", b).Run(); err == nil {
 			return b, nil

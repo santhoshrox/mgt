@@ -13,6 +13,9 @@ var rootCmd = &cobra.Command{
 	Long:               `mgt enhances the Charcoal (gt) tool with simpler navigation and better stack management from the trunk.`,
 	Args:               cobra.ArbitraryArgs,
 	DisableFlagParsing: true, // Pass flags through to gt
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		gt.EnsureDefaultRemote()
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			cmd.Help()
