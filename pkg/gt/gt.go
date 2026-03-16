@@ -134,6 +134,53 @@ func parseStackBranches(output, trunk string) []string {
 	return branches
 }
 
+// ExtractBranch detaches the given branch from its stack and moves it onto trunk.
+// If the branch has children in the stack, they are reconnected to the branch's parent.
+func ExtractBranch(trunk string, stackBranches []string, branch string) error {
+	idx := -1
+	for i, b := range stackBranches {
+		if b == branch {
+			idx = i
+			break
+		}
+	}
+	if idx == -1 {
+		return fmt.Errorf("branch %s not found in stack", branch)
+	}
+
+	parent := trunk
+	if idx > 0 {
+		parent = stackBranches[idx-1]
+	}
+
+	// Reconnect the child (and everything above it) to the extracted branch's parent
+	if idx < len(stackBranches)-1 {
+		child := stackBranches[idx+1]
+		checkout := exec.Command("git", "checkout", "-q", child)
+		checkout.Stdout = os.Stdout
+		checkout.Stderr = os.Stderr
+		if err := checkout.Run(); err != nil {
+			return fmt.Errorf("checkout %s: %w", child, err)
+		}
+		if err := Run("upstack", "onto", parent); err != nil {
+			return fmt.Errorf("reconnecting %s to %s: %w", child, parent, err)
+		}
+	}
+
+	// Move the extracted branch onto trunk as a standalone stack
+	checkout := exec.Command("git", "checkout", "-q", branch)
+	checkout.Stdout = os.Stdout
+	checkout.Stderr = os.Stderr
+	if err := checkout.Run(); err != nil {
+		return fmt.Errorf("checkout %s: %w", branch, err)
+	}
+	if err := Run("upstack", "onto", trunk); err != nil {
+		return fmt.Errorf("moving %s onto %s: %w", branch, trunk, err)
+	}
+
+	return nil
+}
+
 // ExecuteReorder performs the branch reorder given newOrder (base→tip).
 // It checks out each branch and runs `gt upstack onto <parent>` to place it correctly,
 // then returns to returnBranch.
