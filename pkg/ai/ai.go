@@ -91,7 +91,7 @@ func FillPRBody(template, diff, commitLog string) (string, error) {
 			"Here is the PR description template:\n```\n%s\n```\n\n"+
 				"Here are the commits on this branch:\n```\n%s\n```\n\n"+
 				"Here is the diff:\n```\n%s\n```\n\n"+
-				"Fill in the template based on the commits and diff. Be concise and specific. Output only the filled template.",
+				"Fill in the template based on the commits and diff. Be concise and specific. Output only the filled template. Fill the output as per template, dont make up new sections",
 			template, truncate(commitLog, 2000), truncate(diff, 10000)),
 	)
 }

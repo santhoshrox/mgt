@@ -89,6 +89,7 @@ func findPRTemplate() string {
 	for _, c := range candidates {
 		data, err := os.ReadFile(filepath.Join(root, c))
 		if err == nil {
+			fmt.Fprintln(os.Stderr, "Found PR template:", c)
 			if t := strings.TrimSpace(string(data)); t != "" {
 				return t
 			}
