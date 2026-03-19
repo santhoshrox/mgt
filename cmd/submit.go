@@ -7,7 +7,7 @@ import (
 
 var submitCmd = &cobra.Command{
 	Use:                "submit",
-	Short:              "Submit the current stack as pull requests",
+	Short:              "Submit the current branch as a pull request",
 	DisableFlagParsing: true,
 	Args:               cobra.ArbitraryArgs,
 	Run: func(cmd *cobra.Command, args []string) {
