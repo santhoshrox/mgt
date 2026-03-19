@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"os/exec"
@@ -29,27 +30,39 @@ const defaultPRTemplate = `## Summary
 var submitCmd = &cobra.Command{
 	Use:                "submit",
 	Short:              "Submit the current branch as a pull request",
-	Long:               "Submits via `gt branch submit`. If an OpenAI key is configured, generates a filled PR description (from the repo's GitHub template or a default) and copies it to your clipboard.",
+	Long:               "Submits via `gt branch submit`. After the PR is created, offers to generate an AI-filled PR description if an OpenAI key is configured.",
 	DisableFlagParsing: true,
 	Args:               cobra.ArbitraryArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		tryFillPRBody()
+		canGenerate := config.OpenAIKey() != ""
 
 		gtArgs := []string{"branch", "submit"}
 		gtArgs = append(gtArgs, args...)
-		gt.Exec(gtArgs...)
+
+		if canGenerate {
+			if err := gt.Run(gtArgs...); err != nil {
+				os.Exit(1)
+			}
+			promptAndGeneratePRBody()
+		} else {
+			gt.Exec(gtArgs...)
+		}
 	},
 }
 
-func tryFillPRBody() {
-	if config.OpenAIKey() == "" {
-		return
+func promptAndGeneratePRBody() {
+	fmt.Fprint(os.Stderr, "Generate AI PR description? [Y/n] ")
+	scanner := bufio.NewScanner(os.Stdin)
+	if scanner.Scan() {
+		answer := strings.TrimSpace(strings.ToLower(scanner.Text()))
+		if answer == "n" || answer == "no" {
+			return
+		}
 	}
-
-	template := findPRTemplate()
 
 	trunk, err := gt.GetTrunk()
 	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error detecting trunk: %v\n", err)
 		return
 	}
 
@@ -57,24 +70,38 @@ func tryFillPRBody() {
 	commits, _ := exec.Command("git", "log", trunk+"..HEAD", "--oneline").Output()
 
 	if len(diff) == 0 {
+		fmt.Fprintln(os.Stderr, "No diff found, skipping.")
 		return
 	}
+
+	template := findPRTemplate()
 
 	fmt.Fprint(os.Stderr, "Generating PR description...")
 	body, err := ai.FillPRBody(template, string(diff), string(commits))
 	if err != nil {
-		fmt.Fprintf(os.Stderr, " skipped (%v)\n", err)
+		fmt.Fprintf(os.Stderr, " failed (%v)\n", err)
 		return
 	}
+	fmt.Fprintln(os.Stderr, " done.")
 
-	if copyToClipboard(body) {
-		fmt.Fprintln(os.Stderr, " copied to clipboard!")
-	} else {
-		fmt.Fprintln(os.Stderr, " done.")
-		fmt.Fprintln(os.Stderr, "---")
-		fmt.Fprintln(os.Stderr, body)
-		fmt.Fprintln(os.Stderr, "---")
+	applyPRBody(body)
+}
+
+func applyPRBody(body string) {
+	cmd := exec.Command("gh", "pr", "edit", "--body-file", "-")
+	cmd.Stdin = strings.NewReader(body)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		fmt.Fprintln(os.Stderr, "Could not update PR body via gh, copying to clipboard instead.")
+		if !copyToClipboard(body) {
+			fmt.Fprintln(os.Stderr, "---")
+			fmt.Fprintln(os.Stderr, body)
+			fmt.Fprintln(os.Stderr, "---")
+		}
+		return
 	}
+	fmt.Fprintln(os.Stderr, "PR description updated.")
 }
 
 func findPRTemplate() string {
