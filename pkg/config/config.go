@@ -60,6 +60,24 @@ func SetBranchPrefix(value string) error {
 	return setValueInFile(path, "branch_prefix", value)
 }
 
+// OpenAIKey returns the configured OpenAI API key.
+// Read from OPENAI_API_KEY (env), then ~/.mgt (openai_key=...).
+func OpenAIKey() string {
+	if s := strings.TrimSpace(os.Getenv("OPENAI_API_KEY")); s != "" {
+		return s
+	}
+	return readValueFromFile(ConfigPath(), "openai_key")
+}
+
+// SetOpenAIKey writes openai_key to ~/.mgt.
+func SetOpenAIKey(value string) error {
+	path := ConfigPath()
+	if path == "" {
+		return os.ErrNotExist
+	}
+	return setValueInFile(path, "openai_key", value)
+}
+
 // Trunk returns the configured trunk branch for the current repo.
 // Reads from <git-root>/.mgt (trunk=...). Returns empty string if unset.
 func Trunk() string {

@@ -21,7 +21,7 @@ var configCmd = &cobra.Command{
 var configSetCmd = &cobra.Command{
 	Use:   "set [key] [value]",
 	Short: "Set a config value; omit value to clear",
-	Long:  "Supported keys: branch_prefix (user-level ~/.mgt), trunk, remote (repo-level <git-root>/.mgt)",
+	Long:  "Supported keys: branch_prefix, openai_key (user-level ~/.mgt), trunk, remote (repo-level <git-root>/.mgt)",
 	Args:  cobra.RangeArgs(1, 2),
 	Run: func(cmd *cobra.Command, args []string) {
 		key := args[0]
@@ -40,6 +40,16 @@ var configSetCmd = &cobra.Command{
 			} else {
 				fmt.Printf("branch_prefix set to %q\n", value)
 			}
+		case "openai_key":
+			if err := config.SetOpenAIKey(value); err != nil {
+				fmt.Fprintf(os.Stderr, "mgt: %v\n", err)
+				os.Exit(1)
+			}
+			if value == "" {
+				fmt.Println("openai_key cleared")
+			} else {
+				fmt.Println("openai_key set")
+			}
 		case "trunk", "remote":
 			if err := config.SetRepoValue(key, value); err != nil {
 				fmt.Fprintf(os.Stderr, "mgt: %v\n", err)
@@ -51,7 +61,7 @@ var configSetCmd = &cobra.Command{
 				fmt.Printf("%s set to %q\n", key, value)
 			}
 		default:
-			fmt.Fprintf(os.Stderr, "mgt: unknown key %q (supported: branch_prefix, trunk, remote)\n", key)
+			fmt.Fprintf(os.Stderr, "mgt: unknown key %q (supported: branch_prefix, openai_key, trunk, remote)\n", key)
 			os.Exit(1)
 		}
 	},
@@ -67,12 +77,17 @@ var configGetCmd = &cobra.Command{
 		switch key {
 		case "branch_prefix":
 			v = config.BranchPrefix()
+		case "openai_key":
+			v = config.OpenAIKey()
+			if v != "" {
+				v = v[:4] + "..." + v[len(v)-4:]
+			}
 		case "trunk":
 			v = config.Trunk()
 		case "remote":
 			v = config.Remote()
 		default:
-			fmt.Fprintf(os.Stderr, "mgt: unknown key %q (supported: branch_prefix, trunk, remote)\n", key)
+			fmt.Fprintf(os.Stderr, "mgt: unknown key %q (supported: branch_prefix, openai_key, trunk, remote)\n", key)
 			os.Exit(1)
 		}
 		if v == "" {
