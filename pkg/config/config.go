@@ -60,22 +60,51 @@ func SetBranchPrefix(value string) error {
 	return setValueInFile(path, "branch_prefix", value)
 }
 
-// OpenAIKey returns the configured OpenAI API key.
-// Read from OPENAI_API_KEY (env), then ~/.mgt (openai_key=...).
-func OpenAIKey() string {
-	if s := strings.TrimSpace(os.Getenv("OPENAI_API_KEY")); s != "" {
+// LLMKey returns the configured API key for the LLM provider.
+// Reads: LLM_API_KEY env → OPENAI_API_KEY env → llm_key in ~/.mgt → openai_key in ~/.mgt.
+func LLMKey() string {
+	for _, env := range []string{"LLM_API_KEY", "OPENAI_API_KEY"} {
+		if s := strings.TrimSpace(os.Getenv(env)); s != "" {
+			return s
+		}
+	}
+	if s := readValueFromFile(ConfigPath(), "llm_key"); s != "" {
 		return s
 	}
 	return readValueFromFile(ConfigPath(), "openai_key")
 }
 
-// SetOpenAIKey writes openai_key to ~/.mgt.
-func SetOpenAIKey(value string) error {
+// LLMBaseURL returns the base URL for the LLM API.
+// Reads: LLM_BASE_URL env → llm_base_url in ~/.mgt. Defaults to OpenAI.
+func LLMBaseURL() string {
+	if s := strings.TrimSpace(os.Getenv("LLM_BASE_URL")); s != "" {
+		return strings.TrimRight(s, "/")
+	}
+	if s := readValueFromFile(ConfigPath(), "llm_base_url"); s != "" {
+		return strings.TrimRight(s, "/")
+	}
+	return "https://api.openai.com/v1"
+}
+
+// LLMModel returns the model name for the LLM provider.
+// Reads: LLM_MODEL env → llm_model in ~/.mgt. Defaults to gpt-4o-mini.
+func LLMModel() string {
+	if s := strings.TrimSpace(os.Getenv("LLM_MODEL")); s != "" {
+		return s
+	}
+	if s := readValueFromFile(ConfigPath(), "llm_model"); s != "" {
+		return s
+	}
+	return "gpt-4o-mini"
+}
+
+// SetLLMValue writes an llm config key to ~/.mgt.
+func SetLLMValue(key, value string) error {
 	path := ConfigPath()
 	if path == "" {
 		return os.ErrNotExist
 	}
-	return setValueInFile(path, "openai_key", value)
+	return setValueInFile(path, key, value)
 }
 
 // Trunk returns the configured trunk branch for the current repo.

@@ -30,13 +30,12 @@ type chatResponse struct {
 }
 
 func complete(system, user string) (string, error) {
-	key := config.OpenAIKey()
-	if key == "" {
-		return "", fmt.Errorf("OpenAI API key not set. Set OPENAI_API_KEY env or run: mgt config set openai_key <key>")
-	}
+	baseURL := config.LLMBaseURL()
+	model := config.LLMModel()
+	key := config.LLMKey()
 
 	reqBody := chatRequest{
-		Model: "gpt-4o-mini",
+		Model: model,
 		Messages: []message{
 			{Role: "system", Content: system},
 			{Role: "user", Content: user},
@@ -48,16 +47,18 @@ func complete(system, user string) (string, error) {
 		return "", err
 	}
 
-	req, err := http.NewRequest("POST", "https://api.openai.com/v1/chat/completions", bytes.NewReader(body))
+	req, err := http.NewRequest("POST", baseURL+"/chat/completions", bytes.NewReader(body))
 	if err != nil {
 		return "", err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+key)
+	if key != "" {
+		req.Header.Set("Authorization", "Bearer "+key)
+	}
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return "", fmt.Errorf("OpenAI request failed: %w", err)
+		return "", fmt.Errorf("LLM request failed: %w", err)
 	}
 	defer resp.Body.Close()
 
@@ -68,15 +69,15 @@ func complete(system, user string) (string, error) {
 
 	var chatResp chatResponse
 	if err := json.Unmarshal(respBody, &chatResp); err != nil {
-		return "", fmt.Errorf("failed to parse OpenAI response: %w", err)
+		return "", fmt.Errorf("failed to parse LLM response: %w", err)
 	}
 
 	if chatResp.Error != nil {
-		return "", fmt.Errorf("OpenAI API error: %s", chatResp.Error.Message)
+		return "", fmt.Errorf("LLM API error: %s", chatResp.Error.Message)
 	}
 
 	if len(chatResp.Choices) == 0 {
-		return "", fmt.Errorf("OpenAI returned no choices")
+		return "", fmt.Errorf("LLM returned no choices")
 	}
 
 	return chatResp.Choices[0].Message.Content, nil

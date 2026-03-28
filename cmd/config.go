@@ -10,6 +10,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var supportedKeys = "branch_prefix, llm_key, llm_base_url, llm_model (user-level ~/.mgt), trunk, remote (repo-level <git-root>/.mgt)"
+
 var configCmd = &cobra.Command{
 	Use:   "config",
 	Short: "Get or set mgt configuration (~/.mgt)",
@@ -21,7 +23,7 @@ var configCmd = &cobra.Command{
 var configSetCmd = &cobra.Command{
 	Use:   "set [key] [value]",
 	Short: "Set a config value; omit value to clear",
-	Long:  "Supported keys: branch_prefix, openai_key (user-level ~/.mgt), trunk, remote (repo-level <git-root>/.mgt)",
+	Long:  "Supported keys: " + supportedKeys,
 	Args:  cobra.RangeArgs(1, 2),
 	Run: func(cmd *cobra.Command, args []string) {
 		key := args[0]
@@ -40,15 +42,35 @@ var configSetCmd = &cobra.Command{
 			} else {
 				fmt.Printf("branch_prefix set to %q\n", value)
 			}
-		case "openai_key":
-			if err := config.SetOpenAIKey(value); err != nil {
+		case "llm_key", "openai_key":
+			if err := config.SetLLMValue("llm_key", value); err != nil {
 				fmt.Fprintf(os.Stderr, "mgt: %v\n", err)
 				os.Exit(1)
 			}
 			if value == "" {
-				fmt.Println("openai_key cleared")
+				fmt.Println("llm_key cleared")
 			} else {
-				fmt.Println("openai_key set")
+				fmt.Println("llm_key set")
+			}
+		case "llm_base_url":
+			if err := config.SetLLMValue("llm_base_url", value); err != nil {
+				fmt.Fprintf(os.Stderr, "mgt: %v\n", err)
+				os.Exit(1)
+			}
+			if value == "" {
+				fmt.Println("llm_base_url cleared (default: https://api.openai.com/v1)")
+			} else {
+				fmt.Printf("llm_base_url set to %q\n", value)
+			}
+		case "llm_model":
+			if err := config.SetLLMValue("llm_model", value); err != nil {
+				fmt.Fprintf(os.Stderr, "mgt: %v\n", err)
+				os.Exit(1)
+			}
+			if value == "" {
+				fmt.Println("llm_model cleared (default: gpt-4o-mini)")
+			} else {
+				fmt.Printf("llm_model set to %q\n", value)
 			}
 		case "trunk", "remote":
 			if err := config.SetRepoValue(key, value); err != nil {
@@ -61,7 +83,7 @@ var configSetCmd = &cobra.Command{
 				fmt.Printf("%s set to %q\n", key, value)
 			}
 		default:
-			fmt.Fprintf(os.Stderr, "mgt: unknown key %q (supported: branch_prefix, openai_key, trunk, remote)\n", key)
+			fmt.Fprintf(os.Stderr, "mgt: unknown key %q (supported: %s)\n", key, supportedKeys)
 			os.Exit(1)
 		}
 	},
@@ -77,17 +99,21 @@ var configGetCmd = &cobra.Command{
 		switch key {
 		case "branch_prefix":
 			v = config.BranchPrefix()
-		case "openai_key":
-			v = config.OpenAIKey()
-			if v != "" {
+		case "llm_key", "openai_key":
+			v = config.LLMKey()
+			if len(v) > 8 {
 				v = v[:4] + "..." + v[len(v)-4:]
 			}
+		case "llm_base_url":
+			v = config.LLMBaseURL()
+		case "llm_model":
+			v = config.LLMModel()
 		case "trunk":
 			v = config.Trunk()
 		case "remote":
 			v = config.Remote()
 		default:
-			fmt.Fprintf(os.Stderr, "mgt: unknown key %q (supported: branch_prefix, openai_key, trunk, remote)\n", key)
+			fmt.Fprintf(os.Stderr, "mgt: unknown key %q (supported: %s)\n", key, supportedKeys)
 			os.Exit(1)
 		}
 		if v == "" {
@@ -129,7 +155,6 @@ func runConfigInit() error {
 		return strings.TrimSpace(scanner.Text()), nil
 	}
 
-	// User-level: branch prefix
 	value, err := prompt("Branch prefix for new stacks (e.g. santhosh/, leave empty for none): ")
 	if err != nil {
 		return err
@@ -162,7 +187,6 @@ func runConfigInit() error {
 	}
 	fmt.Fprintf(os.Stderr, "  trunk: %s\n", trunk)
 
-	// Repo-level: remote
 	remote, err := prompt("Default remote (default: origin): ")
 	if err != nil {
 		return err
