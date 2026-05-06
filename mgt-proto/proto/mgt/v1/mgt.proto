@@ -1,0 +1,229 @@
+syntax = "proto3";
+
+package mgt.v1;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/santhosh/mgt-proto/gen/mgt/v1;mgtv1";
+
+// MgtService is the gRPC surface used by mgt-cli. The UI continues to talk
+// to mgt-be over its REST API; this service intentionally mirrors only the
+// CLI's needs.
+service MgtService {
+  // ── Auth (CLI device flow) ────────────────────────────────────────────
+  // Both methods are unauthenticated; everything else requires a bearer
+  // token in the `authorization: Bearer <token>` metadata header.
+  rpc DeviceStart(google.protobuf.Empty) returns (DeviceStartResponse);
+  rpc DevicePoll(DevicePollRequest) returns (DevicePollResponse);
+
+  // ── User + repos ──────────────────────────────────────────────────────
+  rpc Me(google.protobuf.Empty) returns (MeResponse);
+  rpc ListRepos(google.protobuf.Empty) returns (ListReposResponse);
+  rpc SyncRepos(google.protobuf.Empty) returns (ListReposResponse);
+
+  // ── Stacks ────────────────────────────────────────────────────────────
+  rpc ListStacks(ListStacksRequest) returns (ListStacksResponse);
+  rpc StackByBranch(StackByBranchRequest) returns (Stack);
+  rpc CreateStack(CreateStackRequest) returns (Stack);
+  rpc AddBranch(AddBranchRequest) returns (StackBranch);
+  rpc MoveBranch(MoveBranchRequest) returns (RebasePlan);
+  rpc DeleteBranch(DeleteBranchRequest) returns (google.protobuf.Empty);
+
+  // ── Pull requests ─────────────────────────────────────────────────────
+  rpc ListPullRequests(ListPullRequestsRequest) returns (ListPullRequestsResponse);
+  rpc CreatePullRequest(CreatePullRequestRequest) returns (PullRequest);
+  rpc DescribePullRequest(DescribePullRequestRequest) returns (DescribeResponse);
+
+  // ── Merge queue ───────────────────────────────────────────────────────
+  rpc ListMergeQueue(ListMergeQueueRequest) returns (ListMergeQueueResponse);
+  rpc EnqueueMerge(EnqueueMergeRequest) returns (MergeQueueEntry);
+  rpc CancelMerge(CancelMergeRequest) returns (google.protobuf.Empty);
+}
+
+// ── Auth ────────────────────────────────────────────────────────────────
+
+message DeviceStartResponse {
+  string user_code = 1;
+  string state = 2;
+  string verification_url = 3;
+}
+
+message DevicePollRequest {
+  string state = 1;
+}
+
+message DevicePollResponse {
+  string token = 1;
+}
+
+// ── User + repos ────────────────────────────────────────────────────────
+
+message MeResponse {
+  int64 id = 1;
+  string login = 2;
+  string avatar_url = 3;
+}
+
+message Repo {
+  int64 id = 1;
+  string owner = 2;
+  string name = 3;
+  string full_name = 4;
+  string default_branch = 5;
+}
+
+message ListReposResponse {
+  repeated Repo repos = 1;
+}
+
+// ── Stacks ──────────────────────────────────────────────────────────────
+
+message Stack {
+  int64 id = 1;
+  string trunk_branch = 2;
+  string name = 3;
+  repeated StackBranch branches = 4;
+  google.protobuf.Timestamp created_at = 5;
+}
+
+message StackBranch {
+  int64 id = 1;
+  string name = 2;
+  string parent = 3;
+  int32 position = 4;
+  string head_sha = 5;
+  int32 pr_number = 6;
+}
+
+message ListStacksRequest {
+  int64 repo_id = 1;
+}
+
+message ListStacksResponse {
+  repeated Stack stacks = 1;
+}
+
+message StackByBranchRequest {
+  int64 repo_id = 1;
+  string branch = 2;
+}
+
+message CreateStackRequest {
+  int64 repo_id = 1;
+  string branch = 2;
+  string trunk = 3;
+}
+
+message AddBranchRequest {
+  int64 repo_id = 1;
+  int64 stack_id = 2;
+  string name = 3;
+  string parent = 4;
+}
+
+message MoveBranchRequest {
+  int64 repo_id = 1;
+  int64 stack_id = 2;
+  int64 branch_id = 3;
+  string parent = 4;
+}
+
+message DeleteBranchRequest {
+  int64 repo_id = 1;
+  int64 stack_id = 2;
+  int64 branch_id = 3;
+}
+
+message RebaseStep {
+  string branch = 1;
+  string onto = 2;
+}
+
+message RebasePlan {
+  repeated RebaseStep steps = 1;
+}
+
+// ── Pulls ───────────────────────────────────────────────────────────────
+
+message PullRequest {
+  int64 id = 1;
+  int32 number = 2;
+  string title = 3;
+  string body = 4;
+  string state = 5;
+  bool merged = 6;
+  bool draft = 7;
+  string author_login = 8;
+  string author_avatar_url = 9;
+  string head_branch = 10;
+  string base_branch = 11;
+  string ci_state = 12;
+  string mergeable_state = 13;
+  int32 additions = 14;
+  int32 deletions = 15;
+  int32 comments = 16;
+  string html_url = 17;
+  google.protobuf.Timestamp updated_at = 18;
+}
+
+message ListPullRequestsRequest {
+  int64 repo_id = 1;
+  string state = 2;
+  string author = 3;
+  string q = 4;
+}
+
+message ListPullRequestsResponse {
+  repeated PullRequest pulls = 1;
+}
+
+message CreatePullRequestRequest {
+  int64 repo_id = 1;
+  string branch = 2;
+  string base = 3;
+  string title = 4;
+  string body = 5;
+  bool draft = 6;
+  bool ai = 7;
+}
+
+message DescribePullRequestRequest {
+  int64 repo_id = 1;
+  int32 number = 2;
+}
+
+message DescribeResponse {
+  string body = 1;
+}
+
+// ── Merge queue ─────────────────────────────────────────────────────────
+
+message MergeQueueEntry {
+  int64 id = 1;
+  int32 pr_number = 2;
+  string state = 3;
+  int32 position = 4;
+  int32 attempts = 5;
+  string last_error = 6;
+  google.protobuf.Timestamp enqueued_at = 7;
+}
+
+message ListMergeQueueRequest {
+  int64 repo_id = 1;
+}
+
+message ListMergeQueueResponse {
+  repeated MergeQueueEntry entries = 1;
+}
+
+message EnqueueMergeRequest {
+  int64 repo_id = 1;
+  int32 pr_number = 2;
+  string method = 3;
+}
+
+message CancelMergeRequest {
+  int64 repo_id = 1;
+  int64 entry_id = 2;
+}

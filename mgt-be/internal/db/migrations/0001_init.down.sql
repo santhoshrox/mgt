@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS webhook_events;
+DROP TABLE IF EXISTS merge_queue_entries;
+DROP TYPE IF EXISTS merge_queue_state;
+ALTER TABLE IF EXISTS stack_branches DROP CONSTRAINT IF EXISTS stack_branches_pr_id_fkey;
+DROP TABLE IF EXISTS pull_requests;
+DROP TABLE IF EXISTS stack_branches;
+DROP TABLE IF EXISTS stacks;
+DROP TABLE IF EXISTS repositories;
+DROP TABLE IF EXISTS api_tokens;
+DROP TABLE IF EXISTS users;

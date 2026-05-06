@@ -1,0 +1,7 @@
+# Note: gen/ is intentionally NOT ignored. mgt-be and mgt-cli import the
+# generated stubs via a local `replace` directive, so they must be
+# committed alongside the .proto definitions.
+
+*.test
+*.out
+coverage.*

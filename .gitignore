@@ -1,0 +1,32 @@
+# ── Secrets ──────────────────────────────────────────────────────────────
+# Never commit a populated .env. Keep .env.example checked in as the
+# template for new contributors.
+.env
+.env.*
+!.env.example
+
+# Local credentials / config dropped by `mgt login` and friends.
+.mgt/
+.mgt
+*.pem
+*.key
+
+# ── Local data volumes (in case anyone bind-mounts instead of using named
+# volumes from docker-compose) ───────────────────────────────────────────
+pgdata/
+osdata/
+
+# ── OS / editor cruft ────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*.swo
+
+# ── Tooling output ───────────────────────────────────────────────────────
+*.log
+coverage.out
+coverage.html

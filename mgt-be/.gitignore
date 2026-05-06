@@ -1,0 +1,16 @@
+# Compiled binaries
+mgt-be
+/cmd/server/server
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binaries / coverage
+*.test
+*.out
+coverage.*
+
+# Local scratch
+tmp/
