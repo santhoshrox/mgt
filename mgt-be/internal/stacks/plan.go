@@ -5,7 +5,7 @@ package stacks
 import (
 	"fmt"
 
-	"github.com/santhosh/mgt-be/internal/db"
+	"github.com/santhoshrox/mgt-be/internal/db"
 )
 
 // RebaseStep is the wire shape returned to the CLI after a stack mutation.

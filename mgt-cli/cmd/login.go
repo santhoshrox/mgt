@@ -7,8 +7,8 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/santhosh/mgt/pkg/client"
-	"github.com/santhosh/mgt/pkg/config"
+	"github.com/santhoshrox/mgt/pkg/client"
+	"github.com/santhoshrox/mgt/pkg/config"
 	"github.com/spf13/cobra"
 )
 

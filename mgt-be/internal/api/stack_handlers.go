@@ -5,8 +5,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"github.com/santhosh/mgt-be/internal/db"
-	"github.com/santhosh/mgt-be/internal/stacks"
+	"github.com/santhoshrox/mgt-be/internal/db"
+	"github.com/santhoshrox/mgt-be/internal/stacks"
 )
 
 func (s *Server) listStacks(w http.ResponseWriter, r *http.Request) {

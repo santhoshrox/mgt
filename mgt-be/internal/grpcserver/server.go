@@ -13,16 +13,16 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 
-	mgtv1 "github.com/santhosh/mgt-proto/gen/mgt/v1"
+	mgtv1 "github.com/santhoshrox/mgt-proto/gen/mgt/v1"
 
-	"github.com/santhosh/mgt-be/internal/ai"
-	"github.com/santhosh/mgt-be/internal/auth"
-	"github.com/santhosh/mgt-be/internal/config"
-	"github.com/santhosh/mgt-be/internal/core"
-	"github.com/santhosh/mgt-be/internal/crypto"
-	"github.com/santhosh/mgt-be/internal/db"
-	"github.com/santhosh/mgt-be/internal/github"
-	"github.com/santhosh/mgt-be/internal/search"
+	"github.com/santhoshrox/mgt-be/internal/ai"
+	"github.com/santhoshrox/mgt-be/internal/auth"
+	"github.com/santhoshrox/mgt-be/internal/config"
+	"github.com/santhoshrox/mgt-be/internal/core"
+	"github.com/santhoshrox/mgt-be/internal/crypto"
+	"github.com/santhoshrox/mgt-be/internal/db"
+	"github.com/santhoshrox/mgt-be/internal/github"
+	"github.com/santhoshrox/mgt-be/internal/search"
 )
 
 // Server implements MgtServiceServer. It is a thin facade over the same

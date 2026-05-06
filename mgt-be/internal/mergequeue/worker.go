@@ -11,9 +11,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/santhosh/mgt-be/internal/crypto"
-	"github.com/santhosh/mgt-be/internal/db"
-	"github.com/santhosh/mgt-be/internal/github"
+	"github.com/santhoshrox/mgt-be/internal/crypto"
+	"github.com/santhoshrox/mgt-be/internal/db"
+	"github.com/santhoshrox/mgt-be/internal/github"
 )
 
 const maxAttempts = 5

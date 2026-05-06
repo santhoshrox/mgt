@@ -7,11 +7,11 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	mgtv1 "github.com/santhosh/mgt-proto/gen/mgt/v1"
+	mgtv1 "github.com/santhoshrox/mgt-proto/gen/mgt/v1"
 
-	"github.com/santhosh/mgt-be/internal/ai"
-	"github.com/santhosh/mgt-be/internal/db"
-	"github.com/santhosh/mgt-be/internal/github"
+	"github.com/santhoshrox/mgt-be/internal/ai"
+	"github.com/santhoshrox/mgt-be/internal/db"
+	"github.com/santhoshrox/mgt-be/internal/github"
 )
 
 func (s *Server) ListPullRequests(ctx context.Context, in *mgtv1.ListPullRequestsRequest) (*mgtv1.ListPullRequestsResponse, error) {

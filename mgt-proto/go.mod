@@ -1,4 +1,4 @@
-module github.com/santhosh/mgt-proto
+module github.com/santhoshrox/mgt-proto
 
 go 1.25.6
 

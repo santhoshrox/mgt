@@ -1933,7 +1933,7 @@ const file_mgt_v1_mgt_proto_rawDesc = "" +
 	"\x13DescribePullRequest\x12\".mgt.v1.DescribePullRequestRequest\x1a\x18.mgt.v1.DescribeResponse\x12O\n" +
 	"\x0eListMergeQueue\x12\x1d.mgt.v1.ListMergeQueueRequest\x1a\x1e.mgt.v1.ListMergeQueueResponse\x12D\n" +
 	"\fEnqueueMerge\x12\x1b.mgt.v1.EnqueueMergeRequest\x1a\x17.mgt.v1.MergeQueueEntry\x12A\n" +
-	"\vCancelMerge\x12\x1a.mgt.v1.CancelMergeRequest\x1a\x16.google.protobuf.EmptyB0Z.github.com/santhosh/mgt-proto/gen/mgt/v1;mgtv1b\x06proto3"
+	"\vCancelMerge\x12\x1a.mgt.v1.CancelMergeRequest\x1a\x16.google.protobuf.EmptyB3Z1github.com/santhoshrox/mgt-proto/gen/mgt/v1;mgtv1b\x06proto3"
 
 var (
 	file_mgt_v1_mgt_proto_rawDescOnce sync.Once

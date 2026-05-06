@@ -3,9 +3,9 @@ package grpcserver
 import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-	mgtv1 "github.com/santhosh/mgt-proto/gen/mgt/v1"
+	mgtv1 "github.com/santhoshrox/mgt-proto/gen/mgt/v1"
 
-	"github.com/santhosh/mgt-be/internal/db"
+	"github.com/santhoshrox/mgt-be/internal/db"
 )
 
 func repoPB(r db.Repository) *mgtv1.Repo {

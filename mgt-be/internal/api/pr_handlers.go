@@ -8,9 +8,9 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"github.com/santhosh/mgt-be/internal/ai"
-	"github.com/santhosh/mgt-be/internal/db"
-	"github.com/santhosh/mgt-be/internal/github"
+	"github.com/santhoshrox/mgt-be/internal/ai"
+	"github.com/santhoshrox/mgt-be/internal/db"
+	"github.com/santhoshrox/mgt-be/internal/github"
 )
 
 func (s *Server) listPRs(w http.ResponseWriter, r *http.Request) {

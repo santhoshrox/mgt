@@ -5,7 +5,7 @@ package mgt.v1;
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/santhosh/mgt-proto/gen/mgt/v1;mgtv1";
+option go_package = "github.com/santhoshrox/mgt-proto/gen/mgt/v1;mgtv1";
 
 // MgtService is the gRPC surface used by mgt-cli. The UI continues to talk
 // to mgt-be over its REST API; this service intentionally mirrors only the

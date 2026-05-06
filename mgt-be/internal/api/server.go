@@ -13,13 +13,13 @@ import (
 	"github.com/go-chi/chi/v5"
 	chimw "github.com/go-chi/chi/v5/middleware"
 
-	"github.com/santhosh/mgt-be/internal/ai"
-	"github.com/santhosh/mgt-be/internal/auth"
-	"github.com/santhosh/mgt-be/internal/config"
-	"github.com/santhosh/mgt-be/internal/core"
-	"github.com/santhosh/mgt-be/internal/crypto"
-	"github.com/santhosh/mgt-be/internal/db"
-	"github.com/santhosh/mgt-be/internal/search"
+	"github.com/santhoshrox/mgt-be/internal/ai"
+	"github.com/santhoshrox/mgt-be/internal/auth"
+	"github.com/santhoshrox/mgt-be/internal/config"
+	"github.com/santhoshrox/mgt-be/internal/core"
+	"github.com/santhoshrox/mgt-be/internal/crypto"
+	"github.com/santhoshrox/mgt-be/internal/db"
+	"github.com/santhoshrox/mgt-be/internal/search"
 )
 
 // Server backs the REST API used by mgt-ui. It pulls every dependency from a

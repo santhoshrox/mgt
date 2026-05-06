@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"github.com/santhosh/mgt-be/internal/db"
+	"github.com/santhoshrox/mgt-be/internal/db"
 )
 
 func (s *Server) me(w http.ResponseWriter, r *http.Request) {

@@ -1,16 +1,16 @@
-module github.com/santhosh/mgt
+module github.com/santhoshrox/mgt
 
 go 1.25.6
 
 require (
 	github.com/charmbracelet/bubbletea v1.3.10
-	github.com/santhosh/mgt-proto v0.0.0
+	github.com/santhoshrox/mgt-proto v0.0.0
 	github.com/spf13/cobra v1.10.2
 	google.golang.org/grpc v1.81.0
 	google.golang.org/protobuf v1.36.11
 )
 
-replace github.com/santhosh/mgt-proto => ../mgt-proto
+replace github.com/santhoshrox/mgt-proto => ../mgt-proto
 
 require (
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect

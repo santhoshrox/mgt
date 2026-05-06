@@ -7,7 +7,7 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 
-	mgtv1 "github.com/santhosh/mgt-proto/gen/mgt/v1"
+	mgtv1 "github.com/santhoshrox/mgt-proto/gen/mgt/v1"
 )
 
 func (s *Server) ListMergeQueue(ctx context.Context, in *mgtv1.ListMergeQueueRequest) (*mgtv1.ListMergeQueueResponse, error) {

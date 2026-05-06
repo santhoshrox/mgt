@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/santhosh/mgt/pkg/client"
-	"github.com/santhosh/mgt/pkg/git"
-	"github.com/santhosh/mgt/pkg/repo"
+	"github.com/santhoshrox/mgt/pkg/client"
+	"github.com/santhoshrox/mgt/pkg/git"
+	"github.com/santhoshrox/mgt/pkg/repo"
 	"github.com/spf13/cobra"
 )
 

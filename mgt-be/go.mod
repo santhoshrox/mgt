@@ -1,16 +1,16 @@
-module github.com/santhosh/mgt-be
+module github.com/santhoshrox/mgt-be
 
 go 1.25.6
 
 require (
 	github.com/go-chi/chi/v5 v5.2.5
 	github.com/jackc/pgx/v5 v5.9.2
-	github.com/santhosh/mgt-proto v0.0.0
+	github.com/santhoshrox/mgt-proto v0.0.0
 	google.golang.org/grpc v1.81.0
 	google.golang.org/protobuf v1.36.11
 )
 
-replace github.com/santhosh/mgt-proto => ../mgt-proto
+replace github.com/santhoshrox/mgt-proto => ../mgt-proto
 
 require (
 	github.com/jackc/pgpassfile v1.0.0 // indirect

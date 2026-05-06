@@ -4,12 +4,12 @@
 package core
 
 import (
-	"github.com/santhosh/mgt-be/internal/ai"
-	"github.com/santhosh/mgt-be/internal/auth"
-	"github.com/santhosh/mgt-be/internal/config"
-	"github.com/santhosh/mgt-be/internal/crypto"
-	"github.com/santhosh/mgt-be/internal/db"
-	"github.com/santhosh/mgt-be/internal/search"
+	"github.com/santhoshrox/mgt-be/internal/ai"
+	"github.com/santhoshrox/mgt-be/internal/auth"
+	"github.com/santhoshrox/mgt-be/internal/config"
+	"github.com/santhoshrox/mgt-be/internal/crypto"
+	"github.com/santhoshrox/mgt-be/internal/db"
+	"github.com/santhoshrox/mgt-be/internal/search"
 )
 
 // QueueController is implemented by the merge-queue worker. Both servers

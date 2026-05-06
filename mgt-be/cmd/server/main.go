@@ -11,16 +11,16 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/santhosh/mgt-be/internal/ai"
-	"github.com/santhosh/mgt-be/internal/api"
-	"github.com/santhosh/mgt-be/internal/auth"
-	"github.com/santhosh/mgt-be/internal/config"
-	"github.com/santhosh/mgt-be/internal/core"
-	"github.com/santhosh/mgt-be/internal/crypto"
-	"github.com/santhosh/mgt-be/internal/db"
-	"github.com/santhosh/mgt-be/internal/grpcserver"
-	"github.com/santhosh/mgt-be/internal/mergequeue"
-	"github.com/santhosh/mgt-be/internal/search"
+	"github.com/santhoshrox/mgt-be/internal/ai"
+	"github.com/santhoshrox/mgt-be/internal/api"
+	"github.com/santhoshrox/mgt-be/internal/auth"
+	"github.com/santhoshrox/mgt-be/internal/config"
+	"github.com/santhoshrox/mgt-be/internal/core"
+	"github.com/santhoshrox/mgt-be/internal/crypto"
+	"github.com/santhoshrox/mgt-be/internal/db"
+	"github.com/santhoshrox/mgt-be/internal/grpcserver"
+	"github.com/santhoshrox/mgt-be/internal/mergequeue"
+	"github.com/santhoshrox/mgt-be/internal/search"
 )
 
 func main() {

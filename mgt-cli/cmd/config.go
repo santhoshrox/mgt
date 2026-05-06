@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/santhosh/mgt/pkg/config"
+	"github.com/santhoshrox/mgt/pkg/config"
 	"github.com/spf13/cobra"
 )
 

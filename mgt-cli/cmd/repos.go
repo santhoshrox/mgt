@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/santhosh/mgt/pkg/client"
+	"github.com/santhoshrox/mgt/pkg/client"
 	"github.com/spf13/cobra"
 )
 

@@ -15,7 +15,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/santhosh/mgt-be/internal/db"
+	"github.com/santhoshrox/mgt-be/internal/db"
 )
 
 const indexName = "pull_requests"

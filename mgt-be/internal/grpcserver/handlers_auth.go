@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 
-	mgtv1 "github.com/santhosh/mgt-proto/gen/mgt/v1"
+	mgtv1 "github.com/santhoshrox/mgt-proto/gen/mgt/v1"
 )
 
 // DeviceStart begins the CLI device-flow handshake. Mirrors REST /auth/cli/start.

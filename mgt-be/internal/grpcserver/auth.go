@@ -7,8 +7,8 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/santhosh/mgt-be/internal/auth"
-	"github.com/santhosh/mgt-be/internal/db"
+	"github.com/santhoshrox/mgt-be/internal/auth"
+	"github.com/santhoshrox/mgt-be/internal/db"
 )
 
 // userCtxKey scopes the authenticated user attached by the interceptor.
